@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>课程学习清单</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        padding: 24px;
+        min-height: 100vh;
+      }
+
+      .app {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        position: sticky;
+        top: 24px;
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .overview-card {
+        background: linear-gradient(145deg, #1e293b, #0f172a);
+        border: 1px solid #334155;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .overview-card h1 {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #f8fafc;
+      }
+
+      .big-progress {
+        position: relative;
+        width: 140px;
+        height: 140px;
+        margin: 0 auto 24px;
+      }
+
+      .big-progress svg {
+        transform: rotate(-90deg);
+        width: 100%;
+        height: 100%;
+      }
+
+      .big-progress circle {
+        fill: none;
+        stroke-width: 10;
+      }
+
+      .big-progress .track {
+        stroke: #334155;
+      }
+
+      .big-progress .fill {
+        stroke: #3b82f6;
+        stroke-linecap: round;
+        transition: stroke-dashoffset 0.5s ease;
+      }
+
+      .big-progress .label {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: #94a3b8;
+      }
+
+      .big-progress .label strong {
+        font-size: 32px;
+        font-weight: 700;
+        color: #f8fafc;
+      }
+
+      .stat-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #334155;
+        font-size: 14px;
+      }
+
+      .stat-row:last-child {
+        border-bottom: none;
+      }
+
+      .stat-row span:first-child {
+        color: #94a3b8;
+      }
+
+      .stat-row span:last-child {
+        font-weight: 600;
+        color: #f8fafc;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .stat-row .remaining-time {
+        color: #3b82f6;
+      }
+
+      /* Main content */
+      .main {
+        min-width: 0;
+      }
+
+      /* Toolbar */
+      .toolbar {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .toolbar button {
+        padding: 8px 16px;
+        font-size: 13px;
+        border: 1px solid #334155;
+        background: #1e293b;
+        color: #e2e8f0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+
+      .toolbar button:hover {
+        background: #334155;
+      }
+
+      .toolbar button:active {
+        background: #475569;
+      }
+
+      /* Search */
+      .search-box {
+        margin-bottom: 16px;
+      }
+
+      .search-box input {
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 14px;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        outline: none;
+        background: #1e293b;
+        color: #e2e8f0;
+      }
+
+      .search-box input::placeholder {
+        color: #64748b;
+      }
+
+      .search-box input:focus {
+        border-color: #3b82f6;
+      }
+
+      /* List */
+      .video-list {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .video-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 18px;
+        border-bottom: 1px solid #27354f;
+        font-size: 14px;
+        transition: background 0.15s;
+        cursor: pointer;
+      }
+
+      .video-item:last-child {
+        border-bottom: none;
+      }
+
+      .video-item:hover {
+        background: #26334d;
+      }
+
+      .video-item.checked {
+        color: #64748b;
+      }
+
+      .video-item.checked .title {
+        text-decoration: line-through;
+      }
+
+      .video-item .index {
+        width: 28px;
+        font-size: 12px;
+        color: #64748b;
+        flex-shrink: 0;
+        text-align: right;
+      }
+
+      .video-item.checked .index {
+        color: #475569;
+      }
+
+      .video-item .title {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: #f1f5f9;
+      }
+
+      .video-item.checked .title {
+        color: #64748b;
+      }
+
+      .video-item .duration {
+        font-size: 13px;
+        color: #94a3b8;
+        font-variant-numeric: tabular-nums;
+        flex-shrink: 0;
+      }
+
+      .video-item.checked .duration {
+        color: #475569;
+      }
+
+      /* Custom checkbox */
+      .checkbox {
+        width: 18px;
+        height: 18px;
+        border: 2px solid #64748b;
+        border-radius: 4px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.15s;
+        background: transparent;
+      }
+
+      .video-item:hover .checkbox {
+        border-color: #3b82f6;
+      }
+
+      .video-item.checked .checkbox {
+        background: #3b82f6;
+        border-color: #3b82f6;
+      }
+
+      .checkbox::after {
+        content: "";
+        width: 5px;
+        height: 9px;
+        border: solid #fff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        opacity: 0;
+        transition: opacity 0.15s;
+        margin-top: -1px;
+      }
+
+      .video-item.checked .checkbox::after {
+        opacity: 1;
+      }
+
+      /* Drag batch select */
+      .video-item.drag-hover {
+        background: #1d4ed8 !important;
+      }
+
+      body.is-dragging {
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      body.is-dragging .video-item {
+        cursor: grab;
+      }
+
+      /* Footer */
+      .footer {
+        margin-top: 16px;
+        font-size: 12px;
+        color: #64748b;
+        text-align: left;
+      }
+
+      /* Empty state */
+      .empty-state {
+        padding: 40px 20px;
+        text-align: center;
+        color: #64748b;
+        font-size: 14px;
+        background: #1e293b;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 16px;
+        }
+
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          position: relative;
+          top: 0;
+          flex-direction: row;
+          overflow-x: auto;
+        }
+
+        .overview-card {
+          min-width: 280px;
+          flex: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="overview-card">
+          <h1>📺 课程学习清单</h1>
+
+          <div class="big-progress">
+            <svg viewBox="0 0 140 140">
+              <circle class="track" cx="70" cy="70" r="60"></circle>
+              <circle
+                class="fill"
+                id="progressCircle"
+                cx="70"
+                cy="70"
+                r="60"
+                stroke-dasharray="377"
+                stroke-dashoffset="377"
+              ></circle>
+            </svg>
+            <div class="label">
+              <strong id="progressPct">0</strong>
+              <span>%</span>
+            </div>
+          </div>
+
+          <div class="stat-row">
+            <span>剩余时长</span>
+            <span class="remaining-time" id="remainingTime">00:00</span>
+          </div>
+          <div class="stat-row">
+            <span>已完成</span>
+            <span><strong id="completedCount">0</strong> / <span id="totalCount">0</span></span>
+          </div>
+          <div class="stat-row">
+            <span>总时长</span>
+            <span id="totalTime">00:00</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <main class="main">
+        <div class="toolbar">
+          <button id="checkAllBtn">全选</button>
+          <button id="uncheckAllBtn">取消全选</button>
+          <button id="resetBtn">重置</button>
+        </div>
+
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="搜索视频标题..." />
+        </div>
+
+        <div class="video-list" id="videoList"></div>
+
+        <div class="footer">
+          ✓ 进度自动保存在本地 · 拖动鼠标可批量勾选 / 取消
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const VIDEOS = [
+        { id: 1, title: "新的开始 - 2026", duration: "06:42" },
+        { id: 2, title: "第一个应用", duration: "13:29" },
+        { id: 3, title: "注意事项", duration: "04:20" },
+        { id: 4, title: "VS Code设置", duration: "25:48" },
+        { id: 5, title: "VS Code中的React 1-1", duration: "13:15" },
+        { id: 6, title: "状态与事件 1-2", duration: "15:33" },
+        { id: 7, title: "表单实践 1-3", duration: "10:38" },
+        { id: 8, title: "动态校验 1-4", duration: "07:20" },
+        { id: 9, title: "动态圆圈 - 挑战01", duration: "08:25" },
+        { id: 10, title: "列表&条件渲染 1-5", duration: "11:57" },
+        { id: 11, title: "列表&条件补充 1-6", duration: "10:13" },
+        { id: 12, title: "Todo应用 - 挑战02", duration: "21:39" },
+        { id: 13, title: "初识vite 2-0", duration: "08:41" },
+        { id: 14, title: "NodeJS 2-1", duration: "07:15" },
+        { id: 15, title: "Vite与React 2-2", duration: "14:32" },
+        { id: 16, title: "Vite迁移 2-3", duration: "10:00" },
+        { id: 17, title: "组件与props 2-4", duration: "15:23" },
+        { id: 18, title: "组件抽象 2-5", duration: "05:37" },
+        { id: 19, title: "children 2-6", duration: "06:00" },
+        { id: 20, title: "迁移与抽象 - 挑战03", duration: "04:46" },
+        { id: 21, title: "请求数据 2-7", duration: "12:46" },
+        { id: 22, title: "SWR 2-8", duration: "08:03" },
+        { id: 23, title: "开发工具 2-9", duration: "04:12" },
+        { id: 24, title: "cleanup 2-10", duration: "07:00" },
+        { id: 25, title: "自定义Hook 2-11", duration: "07:32" },
+        { id: 26, title: "项目介绍 3-0", duration: "05:31" },
+        { id: 27, title: "地理位置 3-1", duration: "07:03" },
+        { id: 28, title: "天气数据 3-2", duration: "14:09" },
+        { id: 29, title: "今日天气 3-3", duration: "12:29" },
+        { id: 30, title: "SWR重构 3-4", duration: "15:27" },
+        { id: 31, title: "重构与切换 3-5", duration: "14:52" },
+        { id: 32, title: "Activity 3-6", duration: "05:06" },
+        { id: 33, title: "预测数据 3-7", duration: "07:41" },
+        { id: 34, title: "预测天气 3-8", duration: "08:52" },
+        { id: 35, title: "项目结构 3-9", duration: "12:23" },
+        { id: 36, title: "路径别名 3-10", duration: "05:56" },
+        { id: 37, title: "部署 3-11", duration: "08:33" },
+        { id: 38, title: "终章", duration: "03:40" },
+      ];
+
+      const STORAGE_KEY = "video-checklist-progress";
+      const CIRCLE_LEN = 2 * Math.PI * 60; // ~377
+
+      function parseSeconds(duration) {
+        const [m, s] = duration.split(":").map(Number);
+        return m * 60 + s;
+      }
+
+      function formatTime(totalSeconds) {
+        const m = Math.floor(totalSeconds / 60);
+        const s = totalSeconds % 60;
+        return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+      }
+
+      function totalDurationOf(list) {
+        return list.reduce((sum, v) => sum + parseSeconds(v.duration), 0);
+      }
+
+      const TOTAL_SECONDS = totalDurationOf(VIDEOS);
+
+      let checkedSet = new Set();
+      let searchQuery = "";
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const arr = JSON.parse(raw);
+            checkedSet = new Set(arr);
+          }
+        } catch {
+          checkedSet = new Set();
+        }
+      }
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...checkedSet]));
+      }
+
+      function isChecked(id) {
+        return checkedSet.has(id);
+      }
+
+      function toggle(id) {
+        if (checkedSet.has(id)) {
+          checkedSet.delete(id);
+        } else {
+          checkedSet.add(id);
+        }
+        saveState();
+        render();
+      }
+
+      function checkAll() {
+        const visible = getFilteredVideos();
+        visible.forEach((v) => checkedSet.add(v.id));
+        saveState();
+        render();
+      }
+
+      function uncheckAll() {
+        const visible = getFilteredVideos();
+        visible.forEach((v) => checkedSet.delete(v.id));
+        saveState();
+        render();
+      }
+
+      function resetAll() {
+        checkedSet.clear();
+        saveState();
+        render();
+      }
+
+      function getFilteredVideos() {
+        if (!searchQuery.trim()) return VIDEOS;
+        const q = searchQuery.trim().toLowerCase();
+        return VIDEOS.filter((v) => v.title.toLowerCase().includes(q));
+      }
+
+      function render() {
+        const filtered = getFilteredVideos();
+        const listEl = document.getElementById("videoList");
+
+        if (filtered.length === 0) {
+          listEl.innerHTML = '<div class="empty-state">没有匹配的视频</div>';
+        } else {
+          listEl.innerHTML = filtered
+            .map(
+              (v) => `
+            <div class="video-item ${isChecked(v.id) ? "checked" : ""}" data-id="${v.id}">
+              <div class="checkbox"></div>
+              <span class="index">${v.id}</span>
+              <span class="title">${escapeHtml(v.title)}</span>
+              <span class="duration">${v.duration}</span>
+            </div>
+          `
+            )
+            .join("");
+        }
+
+        updateStats();
+      }
+
+      function escapeHtml(str) {
+        const div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
+      function updateStats() {
+        let remainingSeconds = 0;
+        let completedCount = 0;
+
+        VIDEOS.forEach((v) => {
+          if (isChecked(v.id)) {
+            completedCount++;
+          } else {
+            remainingSeconds += parseSeconds(v.duration);
+          }
+        });
+
+        const pct =
+          VIDEOS.length > 0
+            ? Math.round((completedCount / VIDEOS.length) * 100)
+            : 0;
+
+        document.getElementById("remainingTime").textContent =
+          formatTime(remainingSeconds);
+        document.getElementById("completedCount").textContent = completedCount;
+        document.getElementById("totalCount").textContent = VIDEOS.length;
+        document.getElementById("totalTime").textContent =
+          formatTime(TOTAL_SECONDS);
+        document.getElementById("progressPct").textContent = pct;
+
+        const circle = document.getElementById("progressCircle");
+        const offset = CIRCLE_LEN - (pct / 100) * CIRCLE_LEN;
+        circle.style.strokeDashoffset = offset;
+      }
+
+      // ---- Drag batch select ----
+
+      let isDragging = false;
+      let dragAction = null;
+      let dragProcessed = new Set();
+
+      function applyToItem(itemEl) {
+        const id = Number(itemEl.dataset.id);
+        if (dragProcessed.has(id)) return;
+        dragProcessed.add(id);
+
+        if (dragAction === "check") {
+          checkedSet.add(id);
+        } else {
+          checkedSet.delete(id);
+        }
+        itemEl.classList.toggle("checked", dragAction === "check");
+        itemEl.classList.add("drag-hover");
+      }
+
+      const listEl = document.getElementById("videoList");
+
+      listEl.addEventListener("mousedown", (e) => {
+        const item = e.target.closest(".video-item");
+        if (!item) return;
+        if (e.target.closest("button")) return;
+        if (e.target.closest("#searchInput")) return;
+
+        e.preventDefault();
+        const id = Number(item.dataset.id);
+        isDragging = true;
+        dragAction = isChecked(id) ? "uncheck" : "check";
+        dragProcessed = new Set();
+
+        applyToItem(item);
+        document.body.classList.add("is-dragging");
+      });
+
+      listEl.addEventListener("mouseover", (e) => {
+        if (!isDragging) return;
+        const item = e.target.closest(".video-item");
+        if (!item) return;
+        applyToItem(item);
+      });
+
+      document.addEventListener("mouseup", () => {
+        if (!isDragging) return;
+        isDragging = false;
+        dragAction = null;
+        document.body.classList.remove("is-dragging");
+
+        document
+          .querySelectorAll(".video-item.drag-hover")
+          .forEach((el) => el.classList.remove("drag-hover"));
+
+        saveState();
+        render();
+      });
+
+      document.getElementById("checkAllBtn").addEventListener("click", checkAll);
+      document
+        .getElementById("uncheckAllBtn")
+        .addEventListener("click", uncheckAll);
+      document.getElementById("resetBtn").addEventListener("click", () => {
+        if (confirm("确定要重置所有进度吗？")) {
+          resetAll();
+        }
+      });
+
+      document.getElementById("searchInput").addEventListener("input", (e) => {
+        searchQuery = e.target.value;
+        render();
+      });
+
+      loadState();
+      render();
+    </script>
+  </body>
+</html>
