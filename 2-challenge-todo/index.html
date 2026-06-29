@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script
       crossorigin
-      src="https://unpkg.com/react@18/umd/react.development.js"
+      src="https://unpkg.com/react@18/umd/react.production.min.js"
     ></script>
     <script
       crossorigin
-      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
     ></script>
     <script
       type="text/javascript"
@@ -17,11 +17,12 @@
     ></script>
 
     <link rel="stylesheet" href="./style.css" />
-    <title>Document</title>
+    <title>2-challenge-todo</title>
   </head>
   <body>
+    <!-- 渲染根元素 -->
     <div id="app"></div>
-
+    <!-- 引入main.js （包含React组件） -->
     <script type="text/babel" src="./main.js"></script>
   </body>
 </html>
