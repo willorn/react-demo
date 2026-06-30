@@ -5,6 +5,7 @@ function useCurrentTime() {
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleString());
 
   useEffect(() => {
+    // 启动的时候启动定时器，每秒更新一次时间
     const timer = setInterval(() => {
       setCurrentTime(new Date().toLocaleString());
     }, 1000);

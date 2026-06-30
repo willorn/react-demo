@@ -7,14 +7,6 @@ function App() {
   const currentTime = useCurrentTime();
 
   const { data, isValidating, mutate: getAdvice } = useSWR(adviceURL, fetcher);
-  // const [curTime, setCurTime] = useState(new Date().toLocaleString());
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setCurTime(new Date().toLocaleString());
-  //   }, 1000);
-  //   return () => clearInterval(timer);
-  // }, []);
-
   return (
     <main>
       <h1>Advice App</h1>

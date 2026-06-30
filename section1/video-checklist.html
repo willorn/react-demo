@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>课程学习清单</title>
+    <title>React 课程学习清单</title>
     <style>
       * {
         margin: 0;
@@ -12,8 +12,8 @@
       }
 
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          sans-serif;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         background: #0f172a;
         color: #e2e8f0;
         padding: 24px;
@@ -350,7 +350,7 @@
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="overview-card">
-          <h1>📺 课程学习清单</h1>
+          <h1>React 课程学习清单</h1>
 
           <div class="big-progress">
             <svg viewBox="0 0 140 140">
@@ -377,7 +377,10 @@
           </div>
           <div class="stat-row">
             <span>已完成</span>
-            <span><strong id="completedCount">0</strong> / <span id="totalCount">0</span></span>
+            <span
+              ><strong id="completedCount">0</strong> /
+              <span id="totalCount">0</span></span
+            >
           </div>
           <div class="stat-row">
             <span>总时长</span>
@@ -543,7 +546,7 @@
               <span class="title">${escapeHtml(v.title)}</span>
               <span class="duration">${v.duration}</span>
             </div>
-          `
+          `,
             )
             .join("");
         }
@@ -569,9 +572,10 @@
           }
         });
 
+        const completedSeconds = TOTAL_SECONDS - remainingSeconds;
         const pct =
-          VIDEOS.length > 0
-            ? Math.round((completedCount / VIDEOS.length) * 100)
+          TOTAL_SECONDS > 0
+            ? Math.round((completedSeconds / TOTAL_SECONDS) * 100)
             : 0;
 
         document.getElementById("remainingTime").textContent =
@@ -646,7 +650,9 @@
         render();
       });
 
-      document.getElementById("checkAllBtn").addEventListener("click", checkAll);
+      document
+        .getElementById("checkAllBtn")
+        .addEventListener("click", checkAll);
       document
         .getElementById("uncheckAllBtn")
         .addEventListener("click", uncheckAll);
