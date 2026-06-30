@@ -5,3 +5,5 @@
 现阶段我们不追求写代码的 best practice，只要保证能够运行起来就 OK 了。
 
 我们也可以在最后给一个提示，说明如何去追求 best practice。如果追求 best practice 太困难的话，我们可以把它往后放。
+
+- 对于 react 应用，我们使用 pnpm 来管理依赖
