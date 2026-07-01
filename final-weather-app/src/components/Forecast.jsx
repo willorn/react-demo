@@ -1,47 +1,24 @@
-import { List, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
+import { List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
 
 // Weather forecast
 // https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
 
-function Forecast() {
-  const weatherForecasts = [
-    {
-      id: 1,
-      weatherIcon: 'https://openweathermap.org/img/wn/10n@2x.png',
-      min: '20',
-      max: '30',
-      weather: 'Rain',
-      date: '2024-04-03',
-    },
-    {
-      id: 2,
-      weatherIcon: 'https://openweathermap.org/img/wn/10n@2x.png',
-      min: '20',
-      max: '30',
-      weather: 'Rain',
-      date: '2024-04-03',
-    },
-    {
-      id: 3,
-      weatherIcon: 'https://openweathermap.org/img/wn/10n@2x.png',
-      min: '20',
-      max: '30',
-      weather: 'Rain',
-      date: '2024-04-03',
-    },
-    {
-      id: 4,
-      weatherIcon: 'https://openweathermap.org/img/wn/10n@2x.png',
-      min: '20',
-      max: '30',
-      weather: 'Rain',
-      date: '2024-04-03',
-    },
-  ];
+const VITE_ICON_API_URL = import.meta.env.VITE_ICON_API_URL;
+
+function Forecast({ forecastData }) {
+  const weatherForecasts =
+    forecastData?.list?.slice(0, 4).map((forecast) => ({
+      id: forecast.dt,
+      weatherIcon: `${VITE_ICON_API_URL}/${forecast.weather?.[0]?.icon}@2x.png`,
+      min: forecast.main?.temp_min,
+      max: forecast.main?.temp_max,
+      weather: forecast.weather?.[0]?.main,
+      date: forecast.dt_txt,
+    })) ?? [];
 
   return (
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+    <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
       {weatherForecasts.map((weatherForecast) => (
         <ListItem key={weatherForecast.id}>
           <ListItemAvatar>

@@ -4,24 +4,22 @@ import fetcher from "../utils/fetcher.js";
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 const VITE_API_KEY = import.meta.env.VITE_API_KEY;
 
-function useCurrentWeather(getPosition) {
+function useForecast(getPosition) {
   const { trigger, data, isMutating, error } = useSWRMutation(
     VITE_API_URL,
     fetcher,
   );
 
-  async function triggerGetWeather() {
+  async function triggerGetForecast() {
     const { latitude, longitude } = await getPosition();
-    console.log("坐标位置" + latitude, longitude);
 
     if (latitude == null || longitude == null) {
       console.log("位置信息为空");
-
       return;
     }
 
     await trigger({
-      path: "weather",
+      path: "forecast",
       latitude,
       longitude,
       apiKey: VITE_API_KEY,
@@ -29,11 +27,11 @@ function useCurrentWeather(getPosition) {
   }
 
   return {
-    triggerGetWeather,
+    triggerGetForecast,
     data,
     isMutating,
     error,
   };
 }
 
-export default useCurrentWeather;
+export default useForecast;

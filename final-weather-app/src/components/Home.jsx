@@ -1,16 +1,8 @@
 import { Button } from "@mui/material";
 import Day from "./Day";
 import styles from "./Home.module.css";
-import useCurrentWeather from "../hooks/useCurrentWeather.js";
 
-function Home({ currentLocation, getPosition }) {
-  const {
-    triggerGetWeather,
-    data: weatherData,
-    isMutating,
-    error,
-  } = useCurrentWeather(getPosition);
-
+function Home({ weatherData, triggerLoadWeather, isLoading }) {
   return (
     <section className={styles.section}>
       位置: {weatherData?.name}
@@ -20,10 +12,10 @@ function Home({ currentLocation, getPosition }) {
         code={weatherData?.weather?.[0]?.icon}
       />
       <Button
-        disabled={isMutating}
+        disabled={isLoading}
         variant="contained"
         size="medium"
-        onClick={triggerGetWeather}
+        onClick={triggerLoadWeather}
       >
         Get Start
       </Button>
