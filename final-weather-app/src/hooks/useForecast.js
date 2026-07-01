@@ -1,13 +1,13 @@
 import useSWRMutation from "swr/mutation";
-import fetcher from "../utils/fetcher.js";
+import openWeatherApiFetcher from "../utils/openWeatherApiFetcher.js";
 
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 const VITE_API_KEY = import.meta.env.VITE_API_KEY;
 
 function useForecast(getPosition) {
   const { trigger, data, isMutating, error } = useSWRMutation(
-    VITE_API_URL,
-    fetcher,
+    "weather-forecast",
+    openWeatherApiFetcher,
   );
 
   async function triggerGetForecast() {
@@ -19,6 +19,7 @@ function useForecast(getPosition) {
     }
 
     await trigger({
+      baseUrl: VITE_API_URL,
       path: "forecast",
       latitude,
       longitude,

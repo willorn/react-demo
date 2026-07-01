@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import Day from "./Day";
+import Day from "../forecast/Day.jsx";
 import styles from "./Home.module.css";
 
 function Home({ weatherData, triggerLoadWeather, isLoading }) {
