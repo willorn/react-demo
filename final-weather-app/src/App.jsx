@@ -5,11 +5,11 @@ import useGeolocation from "./hooks/useGeolocation.js";
 
 function App() {
   // 获取位置信息
-  const { getPosition } = useGeolocation();
+  const { currentLocation, getPosition } = useGeolocation();
 
   return (
     <Container>
-      <Home getPosition={getPosition} />
+      <Home currentLocation={currentLocation} getPosition={getPosition} />
       <Forecast />
     </Container>
   );

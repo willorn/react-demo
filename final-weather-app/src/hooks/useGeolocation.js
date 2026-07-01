@@ -37,7 +37,7 @@ function useGeolocation() {
   }, []);
 
   // 把当前位置返回给使用这个 Hook 的组件。
-  return { getPosition };
+  return { currentLocation, getPosition };
 }
 
 export default useGeolocation;
