@@ -16,6 +16,7 @@ yarn-error.log*
 
 # Dependencies
 node_modules/
+.env
 
 # Build output (if added later)
 dist/
