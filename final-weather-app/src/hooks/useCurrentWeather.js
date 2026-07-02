@@ -4,16 +4,13 @@ import openWeatherApiFetcher from "../utils/openWeatherApiFetcher.js";
 const VITE_API_URL = import.meta.env.VITE_API_URL;
 const VITE_API_KEY = import.meta.env.VITE_API_KEY;
 
-function useCurrentWeather(getPosition) {
+function useCurrentWeather() {
   const { trigger, data, isMutating, error } = useSWRMutation(
     "current-weather",
     openWeatherApiFetcher,
   );
 
-  async function triggerGetWeather() {
-    const { latitude, longitude } = await getPosition();
-    console.log("坐标位置" + latitude, longitude);
-
+  async function triggerGetWeather({ latitude, longitude }) {
     if (latitude == null || longitude == null) {
       console.log("位置信息为空");
 

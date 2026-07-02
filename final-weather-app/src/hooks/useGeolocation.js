@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useState } from "react";
 
 // 自定义 Hook：获取当前设备的地理位置。
@@ -30,11 +29,6 @@ function useGeolocation() {
       );
     });
   }
-
-  // 组件首次挂载时自动获取一次位置。
-  useEffect(() => {
-    getPosition();
-  }, []);
 
   // 把当前位置返回给使用这个 Hook 的组件。
   return { currentLocation, getPosition };

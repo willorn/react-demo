@@ -1,0 +1,121 @@
+.section {
+  width: min(100%, 72rem);
+  padding: 0.35rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
+  line-height: 1.1;
+  color: #122033;
+}
+
+.emptyState {
+  padding: 0.95rem 1rem;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, #f7f9fc 0%, #eef3f8 100%);
+  color: #5f6b7a;
+  text-align: left;
+}
+
+.days {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dayGroup {
+  padding: 0.8rem;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, #f9fbff 0%, #eff4fa 100%);
+  box-shadow: 0 10px 24px rgba(28, 43, 66, 0.08);
+}
+
+.dayHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.7rem;
+}
+
+.dayTitle {
+  margin: 0;
+  font-size: 1rem;
+  color: #122033;
+}
+
+.dayMeta {
+  color: #5f6b7a;
+  font-size: 0.82rem;
+}
+
+.slotGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 0.65rem;
+}
+
+.slotCard {
+  padding: 0.7rem 0.55rem;
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(180, 195, 214, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  text-align: center;
+}
+
+.slotTime {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #122033;
+}
+
+.slotIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.slotWeather {
+  font-size: 0.8rem;
+  color: #2b3a4f;
+}
+
+.slotTemp {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #122033;
+}
+
+.slotRange {
+  font-size: 0.78rem;
+  color: #607086;
+}
+
+@media (max-width: 767px) {
+  .section {
+    padding: 0.15rem 0.75rem 1.5rem;
+  }
+
+  .dayHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .slotGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

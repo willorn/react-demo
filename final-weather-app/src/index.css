@@ -1,21 +1,26 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100dvh;
+  color: #122033;
+  background:
+    radial-gradient(circle at top, rgba(161, 210, 255, 0.2), transparent 30%),
+    linear-gradient(180deg, #f5f8fc 0%, #edf3f8 100%);
+}
+
+#root {
+  width: 100%;
+}
+
 main {
   margin: 0 auto;
   text-align: center;
-}
-
-.day {
-  padding: 1.6rem 0 2rem;
-  width: 12.8rem;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.2rem;
-
-  /* clickable */
-  cursor: pointer;
-}
-
-.day img {
-  font-size: 5.2rem;
 }
