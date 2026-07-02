@@ -30,16 +30,18 @@
 - 调用状态更新函数 `setInputText` 修改状态
 - React检测状态变化，重新渲染相关组件
 
-#### derived state
+#### 衍生状态（Derived State）
 
 **动态 className 绑定**和**衍生状态（derived state）** 实现输入框的实时校验与样式切换
 
 - derived state --> computed
 - 定义 **derived state** ，实现基于状态变量的实时动态计算
 
-### 列表 && 函数
+### 列表渲染
 
 - 列表&条件：我们用到列表的时候，一般也会用到一个东西叫做 key。官方文档里面有写到“Why we need key in list”，就是有了 key，就能唯一地标记列表中的某个元素，从而保证它们的排序。
+
+### 副作用与数据请求
 
 - `useEffect` 用于组件初次渲染副作用
   - effect中使用异步函数
@@ -67,18 +69,25 @@
 
 ## 组件
 
+### 组件基础
+
 - React components are JavaScript functions that return markup
   - React 组件就是返回标记语言的 JavaScript 函数
   - children 组件：是 React 组件的一个特殊内置 prop。当你在 JSX 中使用双标签写法 `<Component>...</Component>` 时，**所有位于起始标签和结束标签之间的内容（文本、HTML元素、其他组件等）都会自动被收集为一个 `children` prop 传递给该组件**。
   - children 不局限于“属性/传值”，而是**直接包裹真实 UI 片段**，支持复杂组合
 
+### 项目迁移与兼容性
+
 - 很多人只复制代码，然后直接运行，发现报错才去修。
   - 更好的做法是：先阅读新项目的模板文档，了解默认配置；然后逐步添加旧代码，每添加一部分就测试一次。特别留意第三方库的引入方式（比如 Vite 不支持 `require`，需要用 `import` 或 `await import()`）。另外，迁移后要检查开发服务器和生产的构建是否都正常，因为 Vite 生产构建可能和开发环境有差异。
+
+### 条件显示与 Activity
+
 - React 19.2 Activity 组件
   - 解决：条件不满足的时候组件会被 **卸载**问题
   - 该组件类似于条件渲染的中间层容器，所有需要条件控制显示隐藏的子组件包裹其中。区别于传统条件渲染直接卸载组件，Activity 组件通过修改 CSS `display` 属性实现组件的显示或隐藏，但不会卸载组件本身。
 
-### hook
+### 自定义 Hook
 
 **自定义 Hook 命名规范**
 
@@ -87,7 +96,9 @@
 - 与文件名一致（方便维护）
 - 符合 React 官方约定
 
-### react 项目推荐使用 pnpm
+## 工程化与工具
+
+### 包管理与开发环境
 
 - [https://pnpm.io/zh/](https://pnpm.io/zh/)
 
@@ -109,9 +120,7 @@ npm get registry
 npm config set registry https://registry.npmjs.org/
 ```
 
-## MISC
-
-### vite 最佳实践 && 使用技巧
+### Vite 使用技巧
 
 - medium博客: [https://fadamakis.com/a-front-end-application-folder-structure-that-makes-sense-ecc0b690968b](https://fadamakis.com/a-front-end-application-folder-structure-that-makes-sense-ecc0b690968b)
   - 应按功能拆分目录，将 UI 组件和功能逻辑组件分开
